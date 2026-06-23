@@ -1,904 +1,221 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Script Konten — H-20 Menuju Puncak Lawu</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0d0f0e;
-    --surface: #141715;
-    --card: #1a1d1b;
-    --border: #2a2e2b;
-    --accent: #c8f55a;
-    --accent2: #ff6b35;
-    --text: #e8ede9;
-    --muted: #7a8a7c;
-    --tag-bg: #1f2a1f;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    line-height: 1.7;
-    min-height: 100vh;
-  }
-
-  /* HEADER */
-  .hero {
-    position: relative;
-    padding: 60px 40px 48px;
-    border-bottom: 1px solid var(--border);
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 60% 80% at 80% 20%, rgba(200,245,90,0.06) 0%, transparent 70%),
-                radial-gradient(ellipse 40% 60% at 10% 80%, rgba(255,107,53,0.05) 0%, transparent 60%);
-  }
-
-  .series-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--tag-bg);
-    border: 1px solid rgba(200,245,90,0.25);
-    color: var(--accent);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 6px 14px;
-    border-radius: 100px;
-    margin-bottom: 20px;
-  }
-
-  .series-badge span {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--accent);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(48px, 8vw, 96px);
-    line-height: 0.92;
-    letter-spacing: 0.02em;
-    color: var(--text);
-    margin-bottom: 16px;
-  }
-
-  h1 .highlight {
-    color: var(--accent);
-    -webkit-text-stroke: 0px;
-  }
-
-  h1 .stroke {
-    -webkit-text-stroke: 1px var(--muted);
-    color: transparent;
-  }
-
-  .hero-meta {
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-    margin-top: 24px;
-    font-size: 13px;
-    color: var(--muted);
-  }
-
-  .hero-meta strong { color: var(--text); }
-
-  /* LAYOUT */
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 40px 80px;
-  }
-
-  /* EPISODE CARD */
-  .episode {
-    margin-top: 48px;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    background: var(--card);
-    transition: border-color 0.3s;
-  }
-
-  .episode:hover {
-    border-color: rgba(200,245,90,0.2);
-  }
-
-  .episode-header {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 24px 28px;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-  }
-
-  .ep-number {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 48px;
-    line-height: 1;
-    color: var(--accent);
-    min-width: 72px;
-    letter-spacing: 0.02em;
-  }
-
-  .ep-number.orange { color: var(--accent2); }
-
-  .ep-info { flex: 1; }
-
-  .ep-day {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-
-  .ep-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 26px;
-    letter-spacing: 0.04em;
-    line-height: 1.1;
-    color: var(--text);
-  }
-
-  .ep-duration {
-    font-size: 12px;
-    color: var(--muted);
-    background: var(--tag-bg);
-    border: 1px solid var(--border);
-    padding: 4px 12px;
-    border-radius: 100px;
-  }
-
-  /* SECTIONS */
-  .section {
-    padding: 28px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .section:last-child { border-bottom: none; }
-
-  .section-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* HOOK */
-  .hook-box {
-    background: linear-gradient(135deg, rgba(200,245,90,0.05), rgba(200,245,90,0.01));
-    border: 1px solid rgba(200,245,90,0.15);
-    border-radius: 12px;
-    padding: 20px 24px;
-    font-style: italic;
-    font-size: 15px;
-    color: var(--text);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hook-box::before {
-    content: '"';
-    position: absolute;
-    top: -12px;
-    left: 16px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 80px;
-    color: rgba(200,245,90,0.12);
-    line-height: 1;
-  }
-
-  .hook-box.orange-hook {
-    background: linear-gradient(135deg, rgba(255,107,53,0.05), rgba(255,107,53,0.01));
-    border-color: rgba(255,107,53,0.15);
-  }
-
-  .hook-box.orange-hook::before {
-    color: rgba(255,107,53,0.12);
-  }
-
-  /* SCRIPT FLOW */
-  .flow-item {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 20px;
-    align-items: flex-start;
-  }
-
-  .flow-item:last-child { margin-bottom: 0; }
-
-  .flow-tag {
-    flex-shrink: 0;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 5px 10px;
-    border-radius: 6px;
-    min-width: 80px;
-    text-align: center;
-    margin-top: 2px;
-  }
-
-  .tag-opening { background: rgba(200,245,90,0.12); color: var(--accent); }
-  .tag-scene { background: rgba(255,255,255,0.06); color: var(--muted); }
-  .tag-vo { background: rgba(100,160,255,0.12); color: #8ab4ff; }
-  .tag-action { background: rgba(255,200,50,0.12); color: #ffd060; }
-  .tag-closing { background: rgba(255,107,53,0.12); color: var(--accent2); }
-  .tag-transition { background: rgba(150,100,255,0.12); color: #c4a8ff; }
-
-  .flow-text {
-    flex: 1;
-    color: var(--text);
-    font-size: 14.5px;
-    line-height: 1.75;
-  }
-
-  .flow-text em {
-    color: var(--muted);
-    font-style: italic;
-    font-size: 13px;
-  }
-
-  .flow-text strong { color: var(--accent); }
-
-  /* SHOTS */
-  .shots-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
-  }
-
-  .shot-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-size: 13px;
-  }
-
-  .shot-icon {
-    font-size: 20px;
-    margin-bottom: 6px;
-  }
-
-  .shot-name {
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 3px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .shot-desc {
-    color: var(--muted);
-    font-size: 12px;
-    line-height: 1.5;
-  }
-
-  /* TIPS */
-  .tips-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .tip-item {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    background: var(--surface);
-    border-radius: 10px;
-    padding: 12px 16px;
-    border: 1px solid var(--border);
-  }
-
-  .tip-icon { flex-shrink: 0; font-size: 16px; }
-
-  .tip-text {
-    font-size: 13.5px;
-    color: var(--text);
-    line-height: 1.6;
-  }
-
-  /* CAPTION */
-  .caption-box {
-    background: var(--surface);
-    border-radius: 12px;
-    padding: 20px 24px;
-    border: 1px solid var(--border);
-    font-size: 14px;
-    white-space: pre-line;
-    line-height: 1.9;
-    color: var(--text);
-  }
-
-  .caption-box .hashtags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
-  }
-
-  .hashtag {
-    font-size: 12px;
-    color: var(--accent);
-    background: var(--tag-bg);
-    border: 1px solid rgba(200,245,90,0.15);
-    padding: 3px 10px;
-    border-radius: 100px;
-  }
-
-  /* OVERVIEW STRIP */
-  .overview-strip {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    margin: 32px 0 0;
-  }
-
-  .strip-item {
-    background: var(--surface);
-    padding: 20px;
-    text-align: center;
-  }
-
-  .strip-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 36px;
-    color: var(--accent);
-    letter-spacing: 0.05em;
-    line-height: 1;
-  }
-
-  .strip-label {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-top: 4px;
-  }
-
-  /* DIVIDER */
-  .series-divider {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin: 56px 0 0;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-  }
-
-  .series-divider::before, .series-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* FOOTER */
-  .footer-note {
-    margin-top: 64px;
-    padding: 24px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: var(--surface);
-    font-size: 13px;
-    color: var(--muted);
-    text-align: center;
-    line-height: 1.8;
-  }
-</style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Altaris — Jurnal Fahri</title>
+<meta name="description" content="Jurnal digital perjalananku belajar software engineering dan teknologi." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="hero">
-  <div class="series-badge"><span></span> Content Script Series</div>
-  <h1>
-    <span class="highlight">H-20</span><br>
-    <span class="stroke">MENUJU</span><br>
-    PUNCAK LAWU
-  </h1>
-  <div class="hero-meta">
-    <div><strong>Format</strong> — Short-form Vlog (Reels / TikTok / YouTube Shorts)</div>
-    <div><strong>Tema Besar</strong> — Persiapan Fisik Mendaki Gunung Lawu</div>
-    <div><strong>Mood</strong> — Raw, Grounded, Motivating</div>
+<canvas id="stars-canvas"></canvas>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">ALTARIS</a>
+    <button id="nav-toggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="nav-links">
+      <li><a href="#about">Tentang</a></li>
+      <li><a href="#philosophy">Filosofi</a></li>
+      <li><a href="#projects">Proyek</a></li>
+      <li><a href="#journey">Perjalanan</a></li>
+      <li><a href="#stack">Tech Stack</a></li>
+      <li><a href="#focus">Fokus</a></li>
+      <li><a href="#contact">Kontak</a></li>
+    </ul>
   </div>
+</nav>
 
-  <div class="overview-strip">
-    <div class="strip-item">
-      <div class="strip-num">3</div>
-      <div class="strip-label">Episode Script</div>
-    </div>
-    <div class="strip-item">
-      <div class="strip-num">3.265m</div>
-      <div class="strip-label">Ketinggian Target</div>
-    </div>
-    <div class="strip-item">
-      <div class="strip-num">H-20</div>
-      <div class="strip-label">Countdown Dimulai</div>
-    </div>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-content fade-in">
+    <h1 class="hero-title">ALTARIS</h1>
+    <p class="hero-sub">Belajar.<br>Membangun.<br>Bertumbuh.</p>
+    <p class="hero-desc">Jurnal digital perjalananku<br>belajar bisnis dan teknologi.</p>
+    <a href="#projects" class="btn-primary">Lihat Proyek</a>
   </div>
-</div>
+  <div class="scroll-indicator">
+    <span></span>
+  </div>
+</section>
 
-<div class="container">
+<!-- ABOUT -->
+<section id="about" class="section reveal">
+  <div class="section-inner">
+    <span class="section-tag">01 — Tentang</span>
+    <h2>Hai, aku Fahri.</h2>
+    <p class="section-text">
+      Seorang siswa SMA dari Indonesia yang tertarik dengan
+      teknologi, bisnis, dan AI.
+    </p>
+    <p class="section-text">
+      Aku senang membangun produk digital kecil sambil
+      mendokumentasikan perjalanan belajarku.
+    </p>
+  </div>
+</section>
 
-  <!-- ===================== EPISODE 1 ===================== -->
-  <div class="episode">
-    <div class="episode-header">
-      <div class="ep-number">01</div>
-      <div class="ep-info">
-        <div class="ep-day">H-20 — Episode Pertama</div>
-        <div class="ep-title">Ini Bukan Sekadar Joging Biasa</div>
-      </div>
-      <div class="ep-duration">±60–75 detik</div>
-    </div>
+<!-- PHILOSOPHY -->
+<section id="philosophy" class="section reveal">
+  <div class="section-inner center">
+    <span class="section-tag">02 — Filosofi</span>
+    <blockquote class="philosophy-quote">
+      Teknologi bukan soal menulis kode.
+      <br><br>
+      Tapi soal memecahkan masalah,<br>
+      terus belajar,<br>
+      dan menciptakan sesuatu yang berguna.
+    </blockquote>
+  </div>
+</section>
 
-    <div class="section">
-      <div class="section-label">Hook / Pembuka</div>
-      <div class="hook-box">
-        "20 hari lagi aku naik Gunung Lawu. Dan hari ini... mulai dari sini dulu."
-        <br><br>
-        <em>* sambil nafas agak ngos-ngosan di awal joging, kamera dari bawah ke wajah *</em>
-      </div>
-    </div>
+<!-- PROJECTS -->
+<section id="projects" class="section reveal">
+  <div class="section-inner">
+    <span class="section-tag">03 — Proyek</span>
+    <h2>Yang Sudah Aku Buat</h2>
+    <div class="projects-grid">
 
-    <div class="section">
-      <div class="section-label">Alur Script</div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-scene">SCENE</div>
-        <div class="flow-text">
-          Opening shot: sepatu lari di aspal / tanah, langkah pertama. Suasana pagi — golden hour atau subuh. <em>(3–5 detik)</em>
-        </div>
-      </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-vo">VO / NGOMONG</div>
-        <div class="flow-text">
-          "Gunung Lawu itu bukan gunung yang bisa kamu remehkan. Ketinggiannya 3.265 meter. Jalurnya panjang. Dan aku punya 20 hari buat nyiapin badan."
-        </div>
-      </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-scene">SCENE</div>
-        <div class="flow-text">
-          B-roll joging — dari depan, dari samping, slow-mo langkah. Tunjukkan lingkungan sekitar (jalanan, taman, lapangan). <em>Sisipkan jam di HP / smartwatch — jam 05.30 atau 06.00.</em>
-        </div>
-      </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-vo">VO / NGOMONG</div>
-        <div class="flow-text">
-          "Program aku sederhana. <strong>Joging pagi rutin</strong> — minimal 30 menit. Latihan pernapasan. Sama satu hal yang sering dilupain orang: istirahat yang cukup."
-        </div>
-      </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-action">TO CAMERA</div>
-        <div class="flow-text">
-          Berhenti sebentar, kamera selfie: "Kalau kamu pernah naik gunung, pasti tau rasanya — kaki udah minta berhenti tapi summit belum keliatan. Nah, itu yang aku latih sekarang. Mental sama fisik."
-        </div>
+      <div class="project-card">
+        <div class="project-card-glow"></div>
+        <h3>Study Tracker</h3>
+        <p class="project-desc">Melacak sesi belajar dan memantau progres.</p>
+        <ul class="project-features">
+          <li>Timer</li>
+          <li>Pencatatan</li>
+          <li>Visualisasi Progres</li>
+        </ul>
+        <a href="https://timerstudy.vercel.app/" target="_blank" rel="noopener" class="project-link">Lihat Proyek →</a>
       </div>
 
-      <div class="flow-item">
-        <div class="flow-tag tag-closing">CLOSING</div>
-        <div class="flow-text">
-          Sambil tetap jalan / lari pelan: <strong>"H-20. Hari pertama. Let's go."</strong> — cut ke tulisan H-20 di layar dengan suara langkah lari.
-        </div>
+      <div class="project-card">
+        <div class="project-card-glow"></div>
+        <h3>Photo Booth</h3>
+        <p class="project-desc">Aplikasi kamera berbasis browser dengan fitur snapshot.</p>
+        <ul class="project-features">
+          <li>Akses Kamera</li>
+          <li>Ambil Foto</li>
+          <li>Unduh Gambar</li>
+        </ul>
+        <a href="https://photoboothkita.vercel.app/" target="_blank" rel="noopener" class="project-link">Coba Sekarang →</a>
       </div>
-    </div>
 
-    <div class="section">
-      <div class="section-label">Shot List</div>
-      <div class="shots-grid">
-        <div class="shot-item">
-          <div class="shot-icon">👟</div>
-          <div class="shot-name">Feet Shot</div>
-          <div class="shot-desc">Kamera di bawah, tangkap ritme langkah lari</div>
-        </div>
-        <div class="shot-item">
-          <div class="shot-icon">🌅</div>
-          <div class="shot-name">Wide Opening</div>
-          <div class="shot-desc">Siluet kamu lari di latar langit pagi</div>
-        </div>
-        <div class="shot-item">
-          <div class="shot-icon">⌚</div>
-          <div class="shot-name">Watch Insert</div>
-          <div class="shot-desc">Close-up jam atau tracker menunjukkan waktu / jarak</div>
-        </div>
-        <div class="shot-item">
-          <div class="shot-icon">😤</div>
-          <div class="shot-name">Face Cam</div>
-          <div class="shot-desc">Ekspresi jujur — lelah tapi semangat</div>
-        </div>
+      <div class="project-card project-card-soon">
+        <h3>Segera Hadir</h3>
+        <p class="project-desc">Proyek baru sedang dalam pengembangan.</p>
       </div>
-    </div>
 
-    <div class="section">
-      <div class="section-label">Caption / Bio Konten</div>
-      <div class="caption-box">
-H-20 menuju puncak Lawu dimulai hari ini 🏔️
-
-Bukan yang paling fit, bukan yang paling pengalaman. Tapi mau nyiapin diri beneran.
-
-Hari pertama: joging pagi 30 menit. Sederhana tapi ini pondasinya.
-
-Ikutin perjalanan ini sampai hari H — siapa tau bisa jalan bareng 🔥
-      <div class="hashtags">
-        <span class="hashtag">#mendakilawu</span>
-        <span class="hashtag">#h20lawu</span>
-        <span class="hashtag">#persiapanmendaki</span>
-        <span class="hashtag">#gununglawu</span>
-        <span class="hashtag">#pendaki</span>
-        <span class="hashtag">#joging</span>
-        <span class="hashtag">#vlogmendaki</span>
-      </div>
-      </div>
     </div>
   </div>
+</section>
 
-  <!-- ===================== EPISODE 2 ===================== -->
-  <div class="series-divider">Episode 2 — H-14</div>
+<!-- JOURNEY -->
+<section id="journey" class="section reveal">
+  <div class="section-inner">
+    <span class="section-tag">04 — Perjalanan</span>
+    <h2>Langkah Sejauh Ini</h2>
+    <div class="timeline">
 
-  <div class="episode">
-    <div class="episode-header">
-      <div class="ep-number orange">02</div>
-      <div class="ep-info">
-        <div class="ep-day">H-14 — Episode Kedua</div>
-        <div class="ep-title">Naik Tangga Ribuan Anak — Ini Latihan Sesungguhnya</div>
-      </div>
-      <div class="ep-duration">±60–90 detik</div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Hook / Pembuka</div>
-      <div class="hook-box orange-hook">
-        "Orang bilang latihan naik gunung itu ya... naik tangga aja. Hari ini aku buktiin sendiri itu sepeduli apa."
-        <em style="display:block;margin-top:8px">* kamera lihat ke atas tangga panjang, panjang banget *</em>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Alur Script</div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-scene">SCENE</div>
-        <div class="flow-text">
-          Tunjukkan lokasi — tangga panjang (masjid, stadion, jembatan penyeberangan, bukit kecil). Kamera lihat dari bawah ke atas. <em>(2–3 detik tanpa ngomong, biarkan visual bicara.)</em>
+      <div class="timeline-year">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h3>2025</h3>
+          <ul>
+            <li>Mulai belajar Python</li>
+            <li>Mulai belajar HTML &amp; CSS</li>
+            <li>Membangun Study Tracker</li>
+          </ul>
         </div>
       </div>
 
-      <div class="flow-item">
-        <div class="flow-tag tag-vo">VO / NGOMONG</div>
-        <div class="flow-text">
-          "H-14. Dua minggu lagi. Dan latihan hari ini fokus ke <strong>kaki dan paru-paru</strong>. Karena di gunung, dua itu yang paling diuji."
+      <div class="timeline-year">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h3>2026</h3>
+          <ul>
+            <li>Membangun Photo Booth</li>
+            <li>Membuat Altaris</li>
+            <li>Belajar Web Development</li>
+          </ul>
         </div>
       </div>
 
-      <div class="flow-item">
-        <div class="flow-tag tag-action">MONTASE</div>
-        <div class="flow-text">
-          Montase naik-turun tangga — cepat, energik, pakai musik upbeat. Tampilkan jumlah repetisi atau waktu yang berlalu. Sisipkan momen istirahat singkat — nafas berat, pegang lutut. <em>Ini bukan negatif — ini JUJUR dan relate.</em>
-        </div>
-      </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-vo">VO / NGOMONG</div>
-        <div class="flow-text">
-          "Yang bikin naik gunung berat itu bukan pas jalan ratanya. Tapi pas tanjakan terus, tiada henti, dan kamu harus tetap gerak. Makanya aku latih ini."
-        </div>
-      </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-action">TO CAMERA</div>
-        <div class="flow-text">
-          Selesai sesi, duduk di tangga — jujur: "Jujur capek banget. Tapi ini cuma tangga. Bayangkan kalau nanti track Lawu yang beneran. Makanya latihan sekarang — biar nanti di atas, kaki tetap bisa diajak kerja sama."
-        </div>
-      </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-closing">CLOSING</div>
-        <div class="flow-text">
-          <strong>"H-14. Pelan-pelan tapi pasti. Lawu, aku datang."</strong> — cut hitam, teks H-14 muncul.
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Shot List</div>
-      <div class="shots-grid">
-        <div class="shot-item">
-          <div class="shot-icon">🪜</div>
-          <div class="shot-name">Stair POV</div>
-          <div class="shot-desc">POV kamera naik tangga — immersive, bikin penonton ikut ngerasain</div>
-        </div>
-        <div class="shot-item">
-          <div class="shot-icon">🎬</div>
-          <div class="shot-name">Slow-mo Kaki</div>
-          <div class="shot-desc">Langkah naik tangga slow-mo — sinematik</div>
-        </div>
-        <div class="shot-item">
-          <div class="shot-icon">😮‍💨</div>
-          <div class="shot-name">Candid Rest</div>
-          <div class="shot-desc">Momen istirahat alami — jangan di-skip, ini yang bikin relate</div>
-        </div>
-        <div class="shot-item">
-          <div class="shot-icon">📊</div>
-          <div class="shot-name">Progress Text</div>
-          <div class="shot-desc">Teks on-screen: "Set ke-3 / 5" atau countdown menit</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Tips Editing</div>
-      <div class="tips-list">
-        <div class="tip-item">
-          <div class="tip-icon">✂️</div>
-          <div class="tip-text">Pakai jump cut saat montase naik tangga — biar berasa berat & repetitif secara visual, sesuai rasa aslinya.</div>
-        </div>
-        <div class="tip-item">
-          <div class="tip-icon">🎵</div>
-          <div class="tip-text">Musik meningkat intensitasnya di pertengahan, lalu turun dramatis saat momen jujur / to camera.</div>
-        </div>
-        <div class="tip-item">
-          <div class="tip-icon">🔢</div>
-          <div class="tip-text">Sisipkan counter teks: "Tangga ke-200... ke-300..." untuk dramasi sederhana tapi efektif.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Caption / Bio Konten</div>
-      <div class="caption-box">
-H-14. Hari ini latihan yang paling "nyakitin" sejauh ini 😮‍💨
-
-Naik-turun tangga sampai kaki gemeteran.
-
-Tapi katanya — kalau kamu bisa ngalahin tangga, kamu bisa ngalahin tanjakan.
-
-Lawu nunggu. Aku lagi nyiapin kaki. 🏔️
-      <div class="hashtags">
-        <span class="hashtag">#latihanmendaki</span>
-        <span class="hashtag">#h14lawu</span>
-        <span class="hashtag">#naikgunung</span>
-        <span class="hashtag">#gununglawu</span>
-        <span class="hashtag">#persiapanfisik</span>
-        <span class="hashtag">#pendakilawu</span>
-      </div>
-      </div>
     </div>
   </div>
+</section>
 
-  <!-- ===================== EPISODE 3 ===================== -->
-  <div class="series-divider">Episode 3 — H-7</div>
-
-  <div class="episode">
-    <div class="episode-header">
-      <div class="ep-number">03</div>
-      <div class="ep-info">
-        <div class="ep-day">H-7 — Episode Ketiga</div>
-        <div class="ep-title">Seminggu Lagi — Ini Rutinitas Terakhirku Sebelum Summit</div>
+<!-- TECH STACK -->
+<section id="stack" class="section reveal">
+  <div class="section-inner">
+    <span class="section-tag">05 — Tech Stack</span>
+    <h2>Tools yang Aku Pakai</h2>
+    <div class="stack-grid">
+      <div class="stack-item">
+        <svg viewBox="0 0 128 128"><path fill="#E44D26" d="M19.1 99.7L9.1 0h109.7l-10 99.7L64 119.1z"/><path fill="#F16529" d="M64 110.7l32.3-9 8.5-83.7H64z"/><path fill="#EBEBEB" d="M64 56.6H47.8L46.7 44H64V31.6H32.8l.3 3.4 3.1 35h27.8zm0 35.5l-.1.1-14.7-4-.9-10.5H36.1l1.8 20.1 26 7.2.1 0z"/><path fill="#fff" d="M63.9 56.6v12.4h15l-1.4 16-13.6 4v12.9l26.1-7.2.2-2.2 3-33.4.3-3.4H63.9zm0-25v12.4h30.9l.3-2.9.5-6.1.3-3.4H63.9z"/></svg>
+        <span>HTML</span>
       </div>
-      <div class="ep-duration">±75–90 detik</div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Hook / Pembuka</div>
-      <div class="hook-box">
-        "Tinggal 7 hari. Dan hari ini aku lakuin latihan terakhir yang berat — setelah ini, aku masuk tapering. Istirahat beneran. Simpan energi untuk puncak."
-        <em style="display:block;margin-top:8px">* suasana lebih tenang, mungkin sore hari, beda feel dari episode sebelumnya *</em>
+      <div class="stack-item">
+        <svg viewBox="0 0 128 128"><path fill="#1572B6" d="M19.1 99.7L9.1 0h109.7l-10 99.7L64 119.1z"/><path fill="#33A9DC" d="M64 110.7l32.3-9 8.5-83.7H64z"/><path fill="#fff" d="M64 56.6H47.7l-1.1-12.6H64V31.6H32.8l.3 3.4 3.1 35H64zm0 35.4l-.1 0-14.6-4-.9-10.5H36.1l1.8 20.1 26 7.2.1 0z"/><path fill="#EBEBEB" d="M63.9 56.6v12.4h15.1l-1.4 16-13.7 4v12.9l26.1-7.2.2-2.2 3-33.4.3-3.4H63.9zm0-25v12.4h30.9l.3-2.9.5-6.1.3-3.4H63.9z"/></svg>
+        <span>CSS</span>
       </div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Alur Script</div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-scene">SCENE</div>
-        <div class="flow-text">
-          Opening beda dari sebelumnya — <em>lebih pelan, lebih kontemplatif.</em> Mungkin kamu duduk sebentar sebelum mulai latihan. Tampilkan suasana H-7 yang berbeda feelnya.
-        </div>
+      <div class="stack-item">
+        <svg viewBox="0 0 128 128"><path fill="#F0DB4F" d="M1.4 1.4h125.2v125.2H1.4z"/><path d="M67.3 96.4c0 7.9-4.6 11.5-11.4 11.5-6.1 0-9.7-3.1-11.5-6.9l8-4.8c1.5 2.7 2.9 5 6.3 5 3.2 0 5.2-1.3 5.2-6.2V64.3h10.4v32.1zm26.9.3c-9.7 0-16-4.6-19-10.7l8.3-4.8c2.2 3.5 5 6.1 10 6.1 4.2 0 6.9-2.1 6.9-5 0-3.5-2.8-4.7-7.4-6.7l-2.5-1.1c-7.4-3.1-12.3-7-12.3-15.3 0-7.6 5.8-13.4 14.9-13.4 6.5 0 11.1 2.3 14.5 8.1l-7.9 5.1c-1.7-3.1-3.6-4.3-6.6-4.3-3 0-4.9 1.9-4.9 4.3 0 3 1.9 4.2 6.1 6l2.5 1.1c8.7 3.7 13.6 7.5 13.6 16 .1 9.3-7.2 14.6-16.2 14.6z" fill="#000"/></svg>
+        <span>JavaScript</span>
       </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-vo">VO / NGOMONG</div>
-        <div class="flow-text">
-          "20 hari lalu aku mulai joging. Dua minggu lalu aku naik ribuan anak tangga. Hari ini — latihan terakhir yang berat. Kombinasi: joging 40 menit + body weight."
-        </div>
-      </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-transition">FLASHBACK</div>
-        <div class="flow-text">
-          Sisipkan <strong>cuplikan singkat episode 1 & 2</strong> — 3–4 detik, buat kesan "perjalanan" yang terasa. Ini yang bikin penonton berasa udah ikut dari awal.
-        </div>
-      </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-action">MONTASE</div>
-        <div class="flow-text">
-          Latihan: joging → push-up → squat → plank. Tampilkan semua tapi efisien. Total montase 15–20 detik. Musik lebih <em>determined</em>, bukan sekadar hype.
-        </div>
-      </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-vo">VO / NGOMONG</div>
-        <div class="flow-text">
-          "Setelah ini, aku masuk fase tapering. Artinya: gerak ringan, makan bergizi, tidur cukup. Badan harus segar pas hari H — bukan kelelahan."
-        </div>
-      </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-action">TO CAMERA</div>
-        <div class="flow-text">
-          Lebih reflektif, jujur: "Jujur ya — aku belum tau bakal bisa sampai puncak atau enggak. Tapi satu hal yang aku tau: aku udah kasih usaha yang jujur. Dan itu udah cukup buat mulai."
-        </div>
-      </div>
-
-      <div class="flow-item">
-        <div class="flow-tag tag-closing">CLOSING</div>
-        <div class="flow-text">
-          <strong>"H-7. Persiapan hampir selesai. Seminggu lagi, kita ketemu di Lawu."</strong> — fade to black, teks "H-7 / 3.265 mdpl / Gunung Lawu."
-        </div>
+      <div class="stack-item">
+        <svg viewBox="0 0 128 128"><path fill-rule="evenodd" clip-rule="evenodd" d="M64 0C28.7 0 0 28.7 0 64c0 28.2 18.3 52.2 43.7 60.6 3.2.6 4.3-1.4 4.3-3.1 0-1.5-.1-6.6-.1-12-17.6 3.8-21.4-7.5-21.4-7.5-2.9-7.4-7.1-9.3-7.1-9.3-5.8-4-.4-3.9-.4-3.9 6.4.5 9.8 6.6 9.8 6.6 5.7 9.8 15 7 18.6 5.4.6-4.2 2.3-7 4.1-8.6-14.1-1.6-28.9-7-28.9-31.2 0-6.9 2.4-12.5 6.5-16.9-.7-1.6-2.8-8.1.6-16.8 0 0 5.3-1.7 17.4 6.5 5-1.4 10.4-2.1 15.7-2.1s10.7.7 15.7 2.1c12.1-8.2 17.4-6.5 17.4-6.5 3.4 8.7 1.3 15.2.6 16.8 4.1 4.4 6.5 10 6.5 16.9 0 24.3-14.8 29.6-29 31.2 2.3 2 4.3 5.9 4.3 11.9 0 8.6-.1 15.5-.1 17.6 0 1.7 1.1 3.7 4.3 3.1C109.7 116.2 128 92.2 128 64 128 28.7 99.3 0 64 0z" fill="#fff"/></svg>
+        <span>GitHub</span>
       </div>
     </div>
+    <p class="stack-note">Sedang dipelajari: React · Next.js · Tailwind · TypeScript</p>
+  </div>
+</section>
 
-    <div class="section">
-      <div class="section-label">Shot List</div>
-      <div class="shots-grid">
-        <div class="shot-item">
-          <div class="shot-icon">🌇</div>
-          <div class="shot-name">Sore / Golden Hour</div>
-          <div class="shot-desc">Beda dari episode lain — feel kontemplatif, bukan morning rush</div>
-        </div>
-        <div class="shot-item">
-          <div class="shot-icon">🔁</div>
-          <div class="shot-name">Recall Clips</div>
-          <div class="shot-desc">Cuplikan ep.1 & ep.2 — recap perjalanan singkat</div>
-        </div>
-        <div class="shot-item">
-          <div class="shot-icon">💪</div>
-          <div class="shot-name">Body Weight</div>
-          <div class="shot-desc">Push-up, squat, plank — kamera medium, angle bervariasi</div>
-        </div>
-        <div class="shot-item">
-          <div class="shot-icon">📱</div>
-          <div class="shot-name">Gear Check</div>
-          <div class="shot-desc">Sekilas tunjukkan tas / perlengkapan — bikin penonton anticipate hari H</div>
-        </div>
-      </div>
-    </div>
+<!-- CURRENT FOCUS -->
+<section id="focus" class="section reveal">
+  <div class="section-inner">
+    <span class="section-tag">06 — Fokus Saat Ini</span>
+    <h2>Yang Sedang Aku Kerjakan</h2>
+    <ul class="focus-list">
+      <li class="active"><span class="dot"></span> Bangun Bisnis</li>
+      <li class="active"><span class="dot"></span> Web Development</li>
+      <li class="active"><span class="dot"></span> Product Design</li>
+      <li class="inactive"><span class="dot"></span> Backend Systems</li>
+      <li class="inactive"><span class="dot"></span> Cloud Computing</li>
+    </ul>
+  </div>
+</section>
 
-    <div class="section">
-      <div class="section-label">Tips Editing</div>
-      <div class="tips-list">
-        <div class="tip-item">
-          <div class="tip-icon">🎞️</div>
-          <div class="tip-text">Episode ini bisa sedikit lebih panjang dari yang lain — ini klimaks sebelum summit. Penonton yang udah ikut dari awal bakal nunggu momen ini.</div>
-        </div>
-        <div class="tip-item">
-          <div class="tip-icon">🔊</div>
-          <div class="tip-text">Di bagian "to camera" yang reflektif — pertimbangkan untuk turunkan musik atau matikan sama sekali. Biarkan suaramu dan ambient sound yang berbicara.</div>
-        </div>
-        <div class="tip-item">
-          <div class="tip-icon">🏔️</div>
-          <div class="tip-text">Closing text bisa tambahkan foto / footage Lawu (yang sudah ada di internet / trip report) sebagai teaser — "Next: hari H-nya."</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Caption / Bio Konten</div>
-      <div class="caption-box">
-H-7. Tinggal seminggu lagi 🏔️
-
-20 hari persiapan. Joging, tangga, body weight. Sekarang saatnya tapering — istirahat yang beneran.
-
-Bukan males. Tapi nyimpen energi. Karena gunung itu bukan soal siapa yang paling cepat. Tapi siapa yang bisa tetap jalan sampai atas.
-
-Seminggu lagi, kita ketemu di puncak Lawu. Doain ya 🙏
-      <div class="hashtags">
-        <span class="hashtag">#h7lawu</span>
-        <span class="hashtag">#gununglawu</span>
-        <span class="hashtag">#countdown</span>
-        <span class="hashtag">#pendaki</span>
-        <span class="hashtag">#taperingrun</span>
-        <span class="hashtag">#persiapanmendaki</span>
-        <span class="hashtag">#vloggunung</span>
-        <span class="hashtag">#lawu3265</span>
-      </div>
-      </div>
+<!-- CONTACT -->
+<section id="contact" class="section reveal">
+  <div class="section-inner center">
+    <span class="section-tag">07 — Kontak</span>
+    <h2>Mari Bertukar Ide</h2>
+    <div class="contact-links">
+      <a href="mailto:your.email@example.com" class="contact-link">Email</a>
+      <a href="https://github.com/yourusername" target="_blank" rel="noopener" class="contact-link">GitHub</a>
     </div>
   </div>
+</section>
 
-  <!-- BONUS TIPS -->
-  <div class="series-divider">Bonus</div>
-
-  <div class="episode">
-    <div class="episode-header">
-      <div class="ep-number" style="font-size:36px;color:var(--muted)">💡</div>
-      <div class="ep-info">
-        <div class="ep-day">Catatan Produksi</div>
-        <div class="ep-title">Tips Biar Konten Ini Beda dari yang Lain</div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="tips-list">
-        <div class="tip-item">
-          <div class="tip-icon">📍</div>
-          <div class="tip-text"><strong>Konsistensi lokasi awal.</strong> Kalau bisa, tiap episode mulai dari spot yang sama — tunjukkan bahwa ini rutinitas, bukan gimmick.</div>
-        </div>
-        <div class="tip-item">
-          <div class="tip-icon">🎙️</div>
-          <div class="tip-text"><strong>Voiceover vs sync sound.</strong> Kamu bisa rekam voiceover di rumah dengan suara jernih, lalu tempel ke footage — jauh lebih clean dari ngomong sambil ngos-ngosan.</div>
-        </div>
-        <div class="tip-item">
-          <div class="tip-icon">📅</div>
-          <div class="tip-text"><strong>Publish H-20, H-14, H-7, dan H-0 (hari summit).</strong> Empat episode ini sudah membentuk arc cerita yang lengkap — dan bikin penonton nunggu episode berikutnya.</div>
-        </div>
-        <div class="tip-item">
-          <div class="tip-icon">😤</div>
-          <div class="tip-text"><strong>Jangan sembunyikan kesulitan.</strong> Momen kamu capek, ngos-ngosan, atau ragu — itu yang bikin konten ini manusiawi dan relate. Jangan cut semuanya.</div>
-        </div>
-        <div class="tip-item">
-          <div class="tip-icon">🎞️</div>
-          <div class="tip-text"><strong>Identitas visual konsisten.</strong> Pilih satu color grade / filter dan pakai di semua episode — biar terasa seperti satu series, bukan kumpulan video random.</div>
-        </div>
-      </div>
-    </div>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">ALTARIS</span>
+    <p class="footer-tagline">From Learning to Legacy.</p>
+    <p class="footer-copy">© 2026 Altaris</p>
   </div>
+</footer>
 
-  <div class="footer-note">
-    Script ini dibuat khusus untuk seri konten persiapan mendaki Gunung Lawu 🏔️<br>
-    Sesuaikan dialog dengan cara ngomong kamu sendiri — yang penting authentik.<br>
-    <strong style="color:var(--accent)">Semoga lancar sampai puncak! 3.265 mdpl menunggu.</strong>
-  </div>
-
-</div>
+<script src="script.js"></script>
 </body>
 </html>
+  
